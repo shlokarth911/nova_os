@@ -20,12 +20,11 @@ const App = () => {
 
   return (
     <div>
-      {/* //Hero Section */}
-
-      {/* <HeroSection />
-      <LoopSection /> */}
+      <HeroSection />
+      <LoopSection />
       <ExclusiveFeatures />
       <DisplaySection />
+      <div className="h-screen"></div>
     </div>
   );
 };
