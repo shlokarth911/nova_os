@@ -24,7 +24,6 @@ const App = () => {
       <LoopSection />
       <ExclusiveFeatures />
       <DisplaySection />
-      <div className="h-screen"></div>
     </div>
   );
 };
