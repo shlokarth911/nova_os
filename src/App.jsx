@@ -7,6 +7,7 @@ import HeroSection from "./components/sections/HeroSection";
 import LoopSection from "./components/sections/LoopSection";
 import ExclusiveFeatures from "./components/sections/ExclusiveFeatures";
 import DisplaySection from "./components/sections/DisplaySection";
+import SecuritySection from "./components/sections/SecuritySection";
 
 const App = () => {
   gsap.registerPlugin(ScrollTrigger);
@@ -24,6 +25,7 @@ const App = () => {
       <LoopSection />
       <ExclusiveFeatures />
       <DisplaySection />
+      <SecuritySection />
     </div>
   );
 };

@@ -54,7 +54,7 @@ const ExclusiveFeatures = () => {
   ];
 
   return (
-    <div className="px-9 font-body">
+    <div className="px-9 font-body mt-20 ">
       <h1 className="p-8 text-6xl border-b border-neutral-300 ">
         Exclusive Features
       </h1>

@@ -56,7 +56,7 @@ const DisplaySection = () => {
   return (
     <div
       ref={displayRef}
-      className="bg-white relative min-h-screen rounded-t-[48px] overflow-hidden"
+      className="bg-white relative min-h-screen rounded-t-[48px] mt-30 overflow-hidden"
     >
       <div className="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2  w-full">
         <img
