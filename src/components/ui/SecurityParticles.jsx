@@ -1,7 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 
-const SecurityParticles = ({ activeShape = "sphere" }) => {
+const SecurityParticles = ({
+  activeShape = "sphere",
+  focusSide = "center",
+}) => {
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
   const animationRef = useRef(null);
@@ -22,12 +25,11 @@ const SecurityParticles = ({ activeShape = "sphere" }) => {
     ctx.scale(dpr, dpr);
 
     // Particle Configuration
-    const particleCount = 1500; // High density for solid shapes
+    const particleCount = 1500;
 
     // Generate Shapes
-    const centerX = width / 2;
-    const centerY = height / 2;
-    const size = Math.min(width, height) * 0.35;
+    // We calculate center dynamically in render, but size is constant
+    const size = Math.min(width, height) * 0.25; // Slightly smaller to fit in half width
 
     // Initialize Particles
     if (particlesRef.current.length === 0) {
@@ -38,9 +40,9 @@ const SecurityParticles = ({ activeShape = "sphere" }) => {
           z: 0,
           vx: (Math.random() - 0.5) * 0.2,
           vy: (Math.random() - 0.5) * 0.2,
-          size: Math.random() * 2 + 1, // Larger base size
-          color: `rgba(37, 99, 235, ${Math.random() * 0.6 + 0.4})`, // High opacity blue
-          target: { x: centerX, y: centerY, z: 0 },
+          size: Math.random() * 2 + 1,
+          color: `rgba(37, 99, 235, ${Math.random() * 0.6 + 0.4})`,
+          target: { x: width / 2, y: height / 2, z: 0 },
         });
       }
     }
@@ -51,39 +53,82 @@ const SecurityParticles = ({ activeShape = "sphere" }) => {
       ctx.clearRect(0, 0, width, height);
       time += 0.005;
 
+      // Determine Target Center based on focusSide
+      let targetCenterX = width / 2;
+      if (focusSide === "left") targetCenterX = width * 0.25;
+      if (focusSide === "right") targetCenterX = width * 0.75;
+
+      const centerY = height / 2;
+
       // Rotate the entire system slightly
       const cosT = Math.cos(time * 0.3);
       const sinT = Math.sin(time * 0.3);
 
+      const interactionRadius = size * 2.5; // Radius within which particles are affected
+
       particlesRef.current.forEach((p, i) => {
-        // 1. Update Target based on Shape
+        // 1. Determine if particle is "nearby" the target center
+        // We use the particle's current position to decide if it should join the shape
+        // This creates the effect of the shape "gathering" nearby particles
+        const distToTargetCenter = Math.hypot(
+          p.x - targetCenterX,
+          p.y - centerY
+        );
+        const isNearby = distToTargetCenter < interactionRadius;
+
         let tx = p.target.x;
         let ty = p.target.y;
         let tz = p.target.z || 0;
 
+        // Default to random float
+        let shapeType = "random";
+
+        // If active shape is set and particle is nearby, try to form shape
+        if (activeShape !== "random" && isNearby) {
+          shapeType = activeShape;
+        }
+
         // Dynamic Shape Calculation
-        if (activeShape === "sphere") {
-          // Dyson Sphere: Rotating Sphere
+        if (shapeType === "sphere") {
+          // Dyson Sphere - Two Concentric Shells
           const theta = (i * 234.12) % (Math.PI * 2);
           const phi = Math.acos(2 * ((i * 123.45) % 1) - 1);
-          const r = size;
+
+          // 60% outer, 40% inner
+          const isInner = i % 5 < 2;
+          const r = isInner ? size * 0.5 : size;
 
           let sx = r * Math.sin(phi) * Math.cos(theta);
           let sy = r * Math.sin(phi) * Math.sin(theta);
           let sz = r * Math.cos(phi);
 
-          // Rotate sphere
-          let rx = sx * cosT - sz * sinT;
-          let rz = sx * sinT + sz * cosT;
+          // Rotate spheres in opposite directions
+          const dir = isInner ? -1 : 1;
+          const rotSpeed = isInner ? 1.5 : 1; // Inner spins faster
 
-          tx = centerX + rx;
+          const effectiveTime = time * dir * rotSpeed;
+          const cosT2 = Math.cos(effectiveTime);
+          const sinT2 = Math.sin(effectiveTime);
+
+          let rx = sx * cosT2 - sz * sinT2;
+          let rz = sx * sinT2 + sz * cosT2;
+
+          tx = targetCenterX + rx;
           ty = centerY + sy;
           tz = rz;
-        } else if (activeShape === "cube") {
-          // Performance Cube - Rotating Cube
-          const side = size * 1.5;
+        } else if (shapeType === "cube") {
+          // Rotating Cube
+          const side = size * 1.2; // Adjust size for cube
+
+          // Map i to cube points.
+          // Since we only use a subset of particles, using 'i' directly might result in gaps
+          // if the nearby particles happen to have indices that cluster on one face.
+          // However, with 1500 particles and random distribution, 'i' is effectively random.
+          // So we can just use 'i' to determine the target position on the cube.
+
           const face = i % 6;
           const pIdx = Math.floor(i / 6);
+          // We assume a virtual full set for mapping
           const faceCount = Math.floor(particleCount / 6);
           const gridSize = Math.ceil(Math.sqrt(faceCount));
 
@@ -123,9 +168,9 @@ const SecurityParticles = ({ activeShape = "sphere" }) => {
             z = -0.5;
           } // Back
 
-          x *= side;
-          y *= side;
-          z *= side;
+          x *= side * 2;
+          y *= side * 2;
+          z *= side * 2;
 
           // Rotate Cube
           let y1 = y * Math.cos(time) - z * Math.sin(time);
@@ -133,41 +178,25 @@ const SecurityParticles = ({ activeShape = "sphere" }) => {
           let x2 = x * Math.cos(time * 0.5) - z1 * Math.sin(time * 0.5);
           let z2 = x * Math.sin(time * 0.5) + z1 * Math.cos(time * 0.5);
 
-          tx = centerX + x2;
+          tx = targetCenterX + x2;
           ty = centerY + y1;
           tz = z2;
-        } else if (activeShape === "grid") {
-          // Scanner Grid
-          const cols = 50;
-          const r = Math.floor(i / cols);
-          const c = i % cols;
-          const step = (size * 2.5) / 50;
+        } else {
+          // Random / Floating
+          // Continuous movement using velocity
+          p.x += p.vx * 2; // Speed multiplier
+          p.y += p.vy * 2;
 
-          const wave = Math.sin(c * 0.3 + time * 4) * 30;
+          // Wrap around screen edges
+          if (p.x < 0) p.x = width;
+          if (p.x > width) p.x = 0;
+          if (p.y < 0) p.y = height;
+          if (p.y > height) p.y = 0;
 
-          tx = centerX - size * 1.25 + c * step;
-          ty = centerY - size * 0.8 + r * step * 0.6 + wave;
-        } else if (activeShape === "chip") {
-          // Hardware Chip
-          const side = size * 1.2;
-          const gridSize = Math.ceil(Math.sqrt(particleCount));
-          const row = Math.floor(i / gridSize);
-          const col = i % gridSize;
-
-          const nx = col / gridSize - 0.5;
-          const ny = row / gridSize - 0.5;
-
-          tx = centerX + nx * side * 2;
-          ty = centerY + ny * side * 2;
-        } else if (activeShape === "random") {
-          // Random Spread
-          const rx = (i * 8273.1) % width;
-          const ry = (i * 2831.9) % height;
-          const rz = ((i * 4912.7) % 600) - 300;
-
-          tx = rx;
-          ty = ry;
-          tz = rz;
+          // Update target to current position so physics interpolation doesn't fight it
+          tx = p.x;
+          ty = p.y;
+          tz = p.z;
         }
 
         // 2. Physics / Interpolation
@@ -175,12 +204,12 @@ const SecurityParticles = ({ activeShape = "sphere" }) => {
         const dy = ty - p.y;
 
         // Slower, smoother movement for the spread state
-        const force = activeShape === "random" ? 0.01 : 0.08;
+        const force = shapeType === "random" ? 0.02 : 0.1; // Snappier for shape
         p.x += dx * force;
         p.y += dy * force;
 
         // Add noise/float
-        const noise = activeShape === "random" ? 0.5 : 0.1;
+        const noise = shapeType === "random" ? 0.5 : 0.1;
         p.x += Math.sin(time * 0.5 + i) * noise;
         p.y += Math.cos(time * 0.3 + i) * noise;
 
@@ -201,16 +230,30 @@ const SecurityParticles = ({ activeShape = "sphere" }) => {
       });
 
       // Draw Connecting Lines for Dyson Sphere and Cube
+      // Only connect particles that are part of the shape (i.e., nearby)
       if (activeShape === "sphere" || activeShape === "cube") {
         ctx.strokeStyle = "rgba(37, 99, 235, 0.3)";
         ctx.lineWidth = 1;
-        // Connect more points
         const limit = activeShape === "cube" ? 800 : 600;
         const range = activeShape === "cube" ? 50 : 80;
 
+        // We need to be careful: we only want to connect particles that are actually IN the shape.
+        // We can check distance to center again.
+
+        // Optimization: Only check a subset of particles
         for (let i = 0; i < limit; i++) {
           const p1 = particlesRef.current[i];
+          // Check if p1 is part of the shape
+          if (
+            Math.hypot(p1.x - targetCenterX, p1.y - centerY) > interactionRadius
+          )
+            continue;
+
           const p2 = particlesRef.current[(i + 1) % limit];
+          if (
+            Math.hypot(p2.x - targetCenterX, p2.y - centerY) > interactionRadius
+          )
+            continue;
 
           const dist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
           if (dist < range) {
@@ -240,7 +283,7 @@ const SecurityParticles = ({ activeShape = "sphere" }) => {
       cancelAnimationFrame(animationRef.current);
       window.removeEventListener("resize", handleResize);
     };
-  }, [activeShape]);
+  }, [activeShape, focusSide]);
 
   return (
     <div
