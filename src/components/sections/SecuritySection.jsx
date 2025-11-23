@@ -6,7 +6,7 @@ const SecuritySection = () => {
   const [activeShape, setActiveShape] = useState("random");
 
   return (
-    <section className="relative w-full h-screen bg-white text-neutral-900 font-body overflow-hidden flex items-center justify-center">
+    <section className="relative w-full h-screen bg-white text-neutral-900 font-body overflow-hidden flex items-center justify-center rounded-b-[48px]">
       {/* Background Particles */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <SecurityParticles activeShape={activeShape} focusSide="center" />
@@ -16,7 +16,7 @@ const SecuritySection = () => {
       <div
         onMouseEnter={() => setActiveShape("sphere")}
         onMouseLeave={() => setActiveShape("random")}
-        className="relative z-10 max-w-2xl w-full p-12 flex flex-col items-center justify-center text-center  transition-colors duration-500 rounded-3xl cursor-pointer group"
+        className="relative z-10 max-w-2xl w-full p-12 flex flex-col items-center justify-center text-center  transition-colors duration-500 rounded-3xl  group"
       >
         <div className="w-24 h-24 mb-8 rounded-full  flex items-center justify-center group-hover:scale-110 transition-transform duration-500 backdrop-blur-sm border border-neutral-200">
           <Shield className="w-12 h-12" />

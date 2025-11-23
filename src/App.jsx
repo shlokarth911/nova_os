@@ -8,6 +8,7 @@ import LoopSection from "./components/sections/LoopSection";
 import ExclusiveFeatures from "./components/sections/ExclusiveFeatures";
 import DisplaySection from "./components/sections/DisplaySection";
 import SecuritySection from "./components/sections/SecuritySection";
+import StarCamSection from "./components/sections/StarCamSection";
 
 const App = () => {
   gsap.registerPlugin(ScrollTrigger);
@@ -26,6 +27,7 @@ const App = () => {
       <ExclusiveFeatures />
       <DisplaySection />
       <SecuritySection />
+      <StarCamSection />
     </div>
   );
 };
