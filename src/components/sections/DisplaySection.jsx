@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import Screen from "../../assets/screen.svg";
+import Screen from "../../assets/Screen.svg";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
