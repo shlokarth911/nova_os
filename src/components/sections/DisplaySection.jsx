@@ -5,48 +5,64 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const DisplaySection = () => {
   const displayRef = useRef(null);
-  const imageRef = useRef(null);
+  const movingImageRef = useRef(null);
   const paraRef = useRef(null);
 
   gsap.registerPlugin(ScrollTrigger);
 
   useEffect(() => {
     const el = displayRef.current;
-    const img = imageRef.current;
+    const movingImg = movingImageRef.current;
     const para = paraRef.current;
 
-    if (!el || !img || !para) return;
+    if (!el || !movingImg || !para) return;
 
-    gsap.set(img, {
+    gsap.set(movingImg, {
       xPercent: -50,
-      yPercent: -52,
+      yPercent: -50,
       width: "108%",
+      borderRadius: "24px",
+    });
+
+    gsap.set(para, {
+      opacity: 0,
+      y: 50,
     });
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: el,
         start: "top 0",
-        end: "+=110%",
+        end: "+=150%",
         scrub: true,
         pin: true,
         anticipatePin: 1,
       },
     });
 
-    tl.to(img, {
-      xPercent: -50,
-      yPercent: -69,
-      width: "48%",
-      duration: 1,
-      ease: "none",
-    });
+    tl.to(
+      movingImg,
+      {
+        xPercent: -50,
+        yPercent: -69,
+        width: "48%",
+        duration: 2,
+        ease: "power1.inOut",
+      },
+      "start"
+    );
+    tl.to(
+      para,
+      {
+        opacity: 1,
+        y: 0, // Slide to final position
+        duration: 1,
+        ease: "power1.out",
+      },
+      "start+=0.5"
+    ); // Staggered to start *after* the image starts zooming
 
-    tl.to(para, {
-      opacity: 1,
-      duration: 1,
-    });
-
+    // Clean up
     return () => {
       if (tl.scrollTrigger) tl.scrollTrigger.kill();
       tl.kill();
@@ -58,23 +74,24 @@ const DisplaySection = () => {
       ref={displayRef}
       className="bg-white relative min-h-screen rounded-t-[48px] mt-30 overflow-hidden"
     >
-      <div className="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2  w-full">
+      <div className="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-full">
         <img
           src={Screen}
-          alt=""
-          className="w-[50%] object-cover absolute top-[0%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 "
+          alt="Display frame"
+          id="screen-frame"
+          className="w-[50%] object-cover absolute top-[0%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
         />
         <img
           src="https://i.pinimg.com/736x/fc/d6/99/fcd699e0cc41c3f549a34c43fa7fcfd8.jpg"
-          alt=""
-          className="object-cover absolute top-[50%] left-[50%] transform -translate-x-1/2  -translate-y-[50%] w-[108%]  rounded-3xl "
-          ref={imageRef}
+          alt="Content"
+          className="object-cover absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-[108%] rounded-3xl"
+          ref={movingImageRef} // Referencing the moving image
         />
       </div>
 
       <p
         ref={paraRef}
-        className=" font-body absolute bottom-12 max-w-xl left-12 text-neutral-900 font-semibold text-lg leading-5  overflow-hidden display-box opacity-0"
+        className="font-body absolute bottom-12 max-w-xl left-12 text-neutral-900 font-semibold text-lg leading-5 overflow-hidden opacity-0"
       >
         NovaOS is a modular, Linux-based OS aiming for extreme speed,
         customization, and securitys. It includes a security core DysonSphere
