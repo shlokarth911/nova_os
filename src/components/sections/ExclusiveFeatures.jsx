@@ -69,7 +69,7 @@ const ExclusiveFeatures = () => {
             <img
               src={feature.image}
               alt=""
-              className="mix-blend-lighten mb-7 w-64 md:w-75"
+              className="mix-blend-screen mb-7 w-64 md:w-75 relative z-10"
             />
 
             <div className="w-full h-[72.5%] z-[-1] bottom-0 left-[50%] transform -translate-x-1/2 absolute bg-neutral-950 rounded-[35px]"></div>

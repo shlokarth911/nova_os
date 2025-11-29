@@ -82,7 +82,7 @@ const DisplaySection = () => {
           className="w-[90%] md:w-[50%] object-cover absolute top-[0%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
         />
         <img
-          src="https://i.pinimg.com/736x/fc/d6/99/fcd699e0cc41c3f549a34c43fa7fcfd8.jpg"
+          src="https://raw.githubusercontent.com/archcraft-os/misc-files/main/screenshots/hyprland/style_1/main.png"
           alt="Content"
           className="object-cover absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-[194%] md:w-[108%] rounded-3xl"
           ref={movingImageRef} // Referencing the moving image
