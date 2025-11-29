@@ -1,14 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, Suspense, lazy } from "react";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import gsap from "gsap";
 import HeroSection from "./components/sections/HeroSection";
-import ExclusiveFeatures from "./components/sections/ExclusiveFeatures";
-import DisplaySection from "./components/sections/DisplaySection";
-import SecuritySection from "./components/sections/SecuritySection";
-import StarCamSection from "./components/sections/StarCamSection";
 import LoadingScreen from "./components/ui/LoadingScreen";
+
+// Lazy load below-the-fold sections
+const ExclusiveFeatures = lazy(() =>
+  import("./components/sections/ExclusiveFeatures")
+);
+const DisplaySection = lazy(() =>
+  import("./components/sections/DisplaySection")
+);
+const SecuritySection = lazy(() =>
+  import("./components/sections/SecuritySection")
+);
+const StarCamSection = lazy(() =>
+  import("./components/sections/StarCamSection")
+);
+const DwonloadsSection = lazy(() =>
+  import("./components/sections/DwonloadsSection")
+);
+const Footer = lazy(() => import("./components/sections/Footer"));
 
 const App = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -38,12 +52,14 @@ const App = () => {
         <div className="animate-fade-in">
           <HeroSection />
 
-          {/* TODO : Remove all related files */}
-          {/* <LoopSection /> */}
-          <ExclusiveFeatures />
-          <DisplaySection />
-          <SecuritySection />
-          <StarCamSection />
+          <Suspense fallback={<div className="h-screen w-full bg-black" />}>
+            <ExclusiveFeatures />
+            <DisplaySection />
+            <SecuritySection />
+            <StarCamSection />
+            <DwonloadsSection />
+            <Footer />
+          </Suspense>
         </div>
       )}
     </>

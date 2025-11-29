@@ -7,11 +7,11 @@ const HeroSection = () => {
   return (
     <div className="min-h-screen relative font-body">
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-[98%] w-[98%] bg-black rounded-[50px] overflow-hidden ">
-        <div className="absolute bottom-[5%] left-[3%] pointer-events-none ">
-          <div className="border-b mb-9  border-neutral-600">
+        <div className="absolute bottom-[5%] left-[3%] pointer-events-none w-full md:w-auto pr-6 md:pr-0">
+          <div className="border-b mb-9 border-neutral-600">
             <SplitText
               text="Nova OS"
-              className="text-[9vw] text-white bottom-[10%] left-[3%]  text-center mix-blend-difference font-display "
+              className="text-[15vw] md:text-[9vw] text-white bottom-[10%] left-[3%] text-center mix-blend-difference font-display leading-none"
               delay={100}
               duration={2}
               ease="elastic.out(1, 0.3)"
@@ -24,25 +24,25 @@ const HeroSection = () => {
             />
           </div>
 
-          <p className="text-white text-xl max-w-lg   ">
+          <p className="text-white text-lg md:text-xl max-w-lg">
             Built on a Linux base, NovaOS adapts to your hardware, learns your
             preferences, and puts YOU in control — from UI to security to apps.
           </p>
 
-          <div className="mt-7 flex gap-2">
-            <div className=" py-2 px-5 text-black bg-white rounded-full w-fit font-medium">
+          <div className="mt-7 flex flex-wrap gap-2">
+            <div className="py-2 px-5 text-black bg-white rounded-full w-fit font-medium text-sm md:text-base">
               Built on Linux
             </div>
-            <div className=" py-2 px-5 text-black bg-white rounded-full w-fit font-medium">
+            <div className="py-2 px-5 text-black bg-white rounded-full w-fit font-medium text-sm md:text-base">
               Built with ❤️
             </div>
           </div>
         </div>
 
-        <div className="absolute right-[2.5%] bottom-7">
+        <div className="absolute right-[2.5%] bottom-7 hidden md:block">
           <div className="h-52 w-96 rounded-[40px] bg-neutral-600 "></div>
           <div className="absolute top-[-40%] left-[-20%]">
-            <div className="backdrop-blur-sm h-18 w-18 absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 rounded-full bg-neutral-950/20 overflow-hidden flex items-center justify-center border   border-neutral-400 hover:scale-110 transition-transform duration-300">
+            <div className="backdrop-blur-sm h-18 w-18 absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 rounded-full bg-neutral-950/20 overflow-hidden flex items-center justify-center border border-neutral-400 hover:scale-110 transition-transform duration-300">
               <Play />
             </div>
 

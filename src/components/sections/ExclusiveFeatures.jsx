@@ -54,31 +54,31 @@ const ExclusiveFeatures = () => {
   ];
 
   return (
-    <div className="px-9 font-body mt-20 ">
-      <h1 className="p-8 text-6xl border-b border-neutral-300 ">
+    <div className="px-4 md:px-9 font-body mt-20">
+      <h1 className="p-4 md:p-8 text-4xl md:text-6xl border-b border-neutral-300">
         Exclusive Features
       </h1>
 
-      <div className="flex items-center justify-evenly py-16 flex-wrap">
+      <div className="flex items-center justify-center md:justify-evenly py-16 flex-wrap gap-8">
         {features.map((feature, idx) => (
           <div
             key={idx}
             ref={addToRefs}
-            className="flex flex-col items-center p-5 pb-8 w-130 relative"
+            className="flex flex-col items-center p-5 pb-8 w-full max-w-sm md:w-130 relative"
           >
             <img
               src={feature.image}
               alt=""
-              className="mix-blend-lighten mb-7 w-75 "
+              className="mix-blend-lighten mb-7 w-64 md:w-75"
             />
 
             <div className="w-full h-[72.5%] z-[-1] bottom-0 left-[50%] transform -translate-x-1/2 absolute bg-neutral-950 rounded-[35px]"></div>
 
-            <h1 className="text-3xl pb-4 mb-4 border-b border-neutral-600 w-full text-center">
+            <h1 className="text-2xl md:text-3xl pb-4 mb-4 border-b border-neutral-600 w-full text-center">
               {feature.title}
             </h1>
 
-            <p className="max-w-[83%] text-center text-lg text-neutral-400">
+            <p className="max-w-[90%] md:max-w-[83%] text-center text-base md:text-lg text-neutral-400">
               {feature.description}
             </p>
           </div>

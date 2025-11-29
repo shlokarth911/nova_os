@@ -33,7 +33,7 @@ const DisplaySection = () => {
       scrollTrigger: {
         trigger: el,
         start: "top 0",
-        end: "+=150%",
+        end: "+=100%",
         scrub: true,
         pin: true,
         anticipatePin: 1,
@@ -59,7 +59,7 @@ const DisplaySection = () => {
         duration: 1,
         ease: "power1.out",
       },
-      "start+=0.5"
+      "start-=1.2"
     ); // Staggered to start *after* the image starts zooming
 
     // Clean up
@@ -79,19 +79,19 @@ const DisplaySection = () => {
           src={Screen}
           alt="Display frame"
           id="screen-frame"
-          className="w-[50%] object-cover absolute top-[0%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
+          className="w-[90%] md:w-[50%] object-cover absolute top-[0%] left-[50%] transform -translate-x-1/2 -translate-y-1/2"
         />
         <img
           src="https://i.pinimg.com/736x/fc/d6/99/fcd699e0cc41c3f549a34c43fa7fcfd8.jpg"
           alt="Content"
-          className="object-cover absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-[108%] rounded-3xl"
+          className="object-cover absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-[194%] md:w-[108%] rounded-3xl"
           ref={movingImageRef} // Referencing the moving image
         />
       </div>
 
       <p
         ref={paraRef}
-        className="font-body absolute bottom-12 max-w-xl left-12 text-neutral-900 font-semibold text-lg leading-5 overflow-hidden opacity-0"
+        className="font-body absolute bottom-12 max-w-xl left-6 md:left-12 right-6 md:right-auto text-neutral-900 font-semibold text-base md:text-lg leading-5 overflow-hidden opacity-0 text-center md:text-left"
       >
         NovaOS is a modular, Linux-based OS aiming for extreme speed,
         customization, and securitys. It includes a security core DysonSphere
