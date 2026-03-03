@@ -49,7 +49,7 @@ const DisplaySection = () => {
         duration: 2,
         ease: "power1.inOut",
       },
-      "start"
+      "start",
     );
     tl.to(
       para,
@@ -59,7 +59,7 @@ const DisplaySection = () => {
         duration: 1,
         ease: "power1.out",
       },
-      "start-=1.2"
+      "start-=1.2",
     ); // Staggered to start *after* the image starts zooming
 
     // Clean up
@@ -72,7 +72,7 @@ const DisplaySection = () => {
   return (
     <div
       ref={displayRef}
-      className="bg-white relative min-h-screen rounded-t-[48px] mt-30 overflow-hidden"
+      className="hidden lg:block bg-white relative min-h-screen rounded-t-[48px] mt-30 overflow-hidden"
     >
       <div className="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-full">
         <img
